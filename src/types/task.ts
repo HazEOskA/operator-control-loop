@@ -52,7 +52,7 @@ export interface AgentResult {
   agent: AgentType;
   output: string;
   isDemo: boolean;
-  source?: "real_api" | "demo_fallback";
+  source?: "real_api" | "real_gmail" | "real_calendar" | "demo_fallback";
   provider?: string;
 }
 

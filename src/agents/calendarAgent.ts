@@ -1,54 +1,46 @@
 import type { AgentResult } from "@/types/task";
+import { fetchCalendarEvents } from "@/integrations/calendarProvider";
 
 const DEMO_EVENTS = [
-  {
-    id: "demo-evt-001",
-    title: "Team Standup",
-    date: "2026-06-26",
-    time: "09:00",
-    duration: "30 min",
-    attendees: ["Alice", "Bob", "Charlie"],
-  },
-  {
-    id: "demo-evt-002",
-    title: "Product Review",
-    date: "2026-06-26",
-    time: "14:00",
-    duration: "60 min",
-    attendees: ["Alice", "Diana"],
-  },
-  {
-    id: "demo-evt-003",
-    title: "Operator Loop Demo",
-    date: "2026-06-27",
-    time: "10:00",
-    duration: "45 min",
-    attendees: ["Team"],
-  },
+  { title: "Team Standup", date: "2026-06-26", time: "09:00", duration: "30 min", attendees: ["Alice", "Bob", "Charlie"] },
+  { title: "Product Review", date: "2026-06-26", time: "14:00", duration: "60 min", attendees: ["Alice", "Diana"] },
+  { title: "Operator Loop Demo", date: "2026-06-27", time: "10:00", duration: "45 min", attendees: ["Team"] },
 ];
 
-export function runCalendarAgent(_input: string): AgentResult {
-  const eventList = DEMO_EVENTS.map(
-    (e) =>
-      `• [${e.date} ${e.time}] ${e.title} (${e.duration}) — Attendees: ${e.attendees.join(", ")}`
-  ).join("\n");
-
-  const output = `
+const DEMO_OUTPUT = `
 [DEMO — Schedule Unit — Read-Only]
 
-⚠ This is a DEMO adapter. No real Google Calendar connection exists in v0.2.
+⚠ This is a DEMO adapter. No real Google Calendar connection is configured.
 ⚠ No calendar events have been created or modified.
 
 Upcoming Events (Demo Data):
-${eventList}
 
-Note: In a production deployment with Google OAuth configured, this unit
-would read your actual calendar. All write operations are disabled in v0.2.
+${DEMO_EVENTS.map(
+  (e) => `• [${e.date} ${e.time}] ${e.title} (${e.duration}) — Attendees: ${e.attendees.join(", ")}`
+).join("\n")}
+
+Note: Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN
+in .env.local to connect to a real Google Calendar (read-only).
 `.trim();
+
+export async function runCalendarAgent(_input: string): Promise<AgentResult> {
+  const result = await fetchCalendarEvents();
+
+  if (result.source === "real_calendar" && result.output) {
+    return {
+      agent: "calendarAgent",
+      output: result.output,
+      isDemo: false,
+      source: "real_calendar",
+      provider: result.provider,
+    };
+  }
 
   return {
     agent: "calendarAgent",
-    output,
+    output: DEMO_OUTPUT,
     isDemo: true,
+    source: "demo_fallback",
+    provider: "mock",
   };
 }

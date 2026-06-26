@@ -1,54 +1,61 @@
 import type { AgentResult } from "@/types/task";
+import { fetchGmailInbox } from "@/integrations/gmailProvider";
 
 const DEMO_EMAILS = [
   {
-    id: "demo-email-001",
     from: "alice@example.com",
     subject: "Operator Loop Project Update",
     preview: "Hey, just wanted to check in on the Operator Loop v0.2 progress...",
     date: "2026-06-25",
-    unread: true,
   },
   {
-    id: "demo-email-002",
     from: "bob@example.com",
     subject: "Team Meeting Notes",
     preview: "Hi everyone, here are the notes from yesterday's meeting...",
     date: "2026-06-24",
-    unread: false,
   },
   {
-    id: "demo-email-003",
     from: "noreply@github.com",
     subject: "New PR: feat/operator-control-loop",
-    preview: "A pull request was opened in osabarca/operator-control-loop...",
+    preview: "A pull request was opened in HazEOskA/operator-control-loop...",
     date: "2026-06-23",
-    unread: false,
   },
 ];
 
-export function runGmailAgent(_input: string): AgentResult {
-  const emailList = DEMO_EMAILS.map(
-    (e) =>
-      `• [${e.date}] ${e.unread ? "🔵 " : ""}From: ${e.from}\n  Subject: ${e.subject}\n  Preview: ${e.preview}`
-  ).join("\n\n");
-
-  const output = `
+const DEMO_OUTPUT = `
 [DEMO — Inbox Unit — Read-Only]
 
-⚠ This is a DEMO adapter. No real Gmail connection exists in v0.2.
+⚠ This is a DEMO adapter. No real Gmail connection is configured.
 ⚠ No emails have been sent, modified, or deleted.
 
-Inbox Summary (Demo Data — 3 of N messages):
-${emailList}
+Inbox Summary (Demo Data — ${DEMO_EMAILS.length} of N messages):
 
-Note: In a production deployment with Google OAuth configured, this unit
-would read your actual Gmail inbox. All send/write operations are disabled in v0.2.
+${DEMO_EMAILS.map(
+  (e) => `• [${e.date}] From: ${e.from}\n  Subject: ${e.subject}\n  Preview: ${e.preview}`
+).join("\n\n")}
+
+Note: Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN
+in .env.local to connect to a real Gmail inbox (read-only).
 `.trim();
+
+export async function runGmailAgent(_input: string): Promise<AgentResult> {
+  const result = await fetchGmailInbox();
+
+  if (result.source === "real_gmail" && result.output) {
+    return {
+      agent: "gmailAgent",
+      output: result.output,
+      isDemo: false,
+      source: "real_gmail",
+      provider: result.provider,
+    };
+  }
 
   return {
     agent: "gmailAgent",
-    output,
+    output: DEMO_OUTPUT,
     isDemo: true,
+    source: "demo_fallback",
+    provider: "mock",
   };
 }

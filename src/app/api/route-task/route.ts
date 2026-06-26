@@ -53,10 +53,10 @@ export async function POST(req: NextRequest) {
           agentResult = await runResearchAgent(trimmedInput);
           break;
         case "calendarAgent":
-          agentResult = runCalendarAgent(trimmedInput);
+          agentResult = await runCalendarAgent(trimmedInput);
           break;
         case "gmailAgent":
-          agentResult = runGmailAgent(trimmedInput);
+          agentResult = await runGmailAgent(trimmedInput);
           break;
         case "codingAgent":
           agentResult = runCodingAgent(trimmedInput);
@@ -76,9 +76,9 @@ export async function POST(req: NextRequest) {
     }
 
     const modeLabel = agentResult.source
-      ? agentResult.source === "real_api"
-        ? `real_api (${agentResult.provider})`
-        : "demo_fallback"
+      ? agentResult.source === "demo_fallback"
+        ? "demo_fallback"
+        : `${agentResult.source} (${agentResult.provider})`
       : `isDemo=${agentResult.isDemo}`;
     task = appendLog(
       { ...task, agentResult },

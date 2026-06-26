@@ -118,6 +118,14 @@ export default function TaskTimeline({ task }: TaskTimelineProps) {
               <span className="bg-emerald-800 text-emerald-200 text-xs px-1.5 py-0.5 rounded">
                 REAL API
               </span>
+            ) : task.agentResult.source === "real_gmail" ? (
+              <span className="bg-blue-800 text-blue-200 text-xs px-1.5 py-0.5 rounded">
+                REAL GMAIL
+              </span>
+            ) : task.agentResult.source === "real_calendar" ? (
+              <span className="bg-teal-800 text-teal-200 text-xs px-1.5 py-0.5 rounded">
+                REAL CALENDAR
+              </span>
             ) : task.agentResult.source === "demo_fallback" ? (
               <span className="bg-amber-800 text-amber-200 text-xs px-1.5 py-0.5 rounded">
                 DEMO FALLBACK
@@ -127,7 +135,7 @@ export default function TaskTimeline({ task }: TaskTimelineProps) {
                 DEMO
               </span>
             ) : null}
-            {task.agentResult.provider && task.agentResult.provider !== "none" && (
+            {task.agentResult.provider && task.agentResult.provider !== "none" && task.agentResult.provider !== "mock" && (
               <span className="text-gray-500 text-xs font-normal normal-case">
                 {task.agentResult.provider}
               </span>
