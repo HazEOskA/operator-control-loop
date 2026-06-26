@@ -45,12 +45,18 @@ export function runRedTeam(
   input: string,
   agentResult: AgentResult
 ): RedTeamResult {
+  // Blocked patterns check user input only — they detect user intent to take a
+  // destructive action, not whether an informational response mentions a concept.
+  // Warning patterns check both — they guard against agent output containing
+  // sensitive data or proposing real external integrations.
+  const inputOnly = input.toLowerCase();
   const combined = `${input} ${agentResult.output}`.toLowerCase();
   const triggeredFlags: string[] = [];
   let highestSeverity: RedTeamStatus = "clear";
 
   for (const { flag, patterns, severity } of RISK_PATTERNS) {
-    if (patterns.some((p) => p.test(combined))) {
+    const target = severity === "blocked" ? inputOnly : combined;
+    if (patterns.some((p) => p.test(target))) {
       triggeredFlags.push(flag);
       if (severity === "blocked") {
         highestSeverity = "blocked";
