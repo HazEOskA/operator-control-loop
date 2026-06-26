@@ -23,8 +23,8 @@ export function simulate(
       safeToExecute: true,
     },
     codingAgent: {
-      action: "Log coding placeholder result",
-      preview: "[PLACEHOLDER] Coding agent is not active in v0.2. Result will be logged as a placeholder entry only.",
+      action: "Log Forge Unit placeholder result",
+      preview: "[PLACEHOLDER] Forge Unit is not active in v0.2. Result will be logged as a placeholder entry only.",
       safeToExecute: true,
     },
     unknown: {

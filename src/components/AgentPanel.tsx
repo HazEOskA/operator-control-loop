@@ -68,13 +68,13 @@ export default function AgentPanel({
 
   return (
     <div className="bg-gray-900 rounded-xl border border-gray-700 p-5">
-      <h2 className="text-lg font-bold text-white mb-4">Agent Input</h2>
+      <h2 className="text-lg font-bold text-white mb-4">Unit Input</h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Describe a task for ALFA... (e.g. 'Research quantum computing')"
+          placeholder="Describe a task for Operator Loop... (e.g. 'Research quantum computing')"
           rows={3}
           disabled={isLoading || disabled}
           className="w-full bg-gray-800 text-white border border-gray-600 rounded-lg p-3 text-sm resize-none focus:outline-none focus:border-indigo-500 placeholder-gray-500 disabled:opacity-50"

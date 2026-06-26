@@ -14,31 +14,31 @@ const STATE_CONFIG: Record<
   Idle: {
     color: "bg-indigo-500",
     pulse: false,
-    label: "Alfred is idle and ready.",
+    label: "Operator Orb is idle and ready.",
     icon: "●",
   },
   Thinking: {
     color: "bg-amber-500",
     pulse: true,
-    label: "Alfred is thinking...",
+    label: "Operator Orb is thinking...",
     icon: "◐",
   },
   Working: {
     color: "bg-emerald-500",
     pulse: true,
-    label: "Alfred is working...",
+    label: "Operator Orb is working...",
     icon: "◑",
   },
   Waiting: {
     color: "bg-blue-500",
     pulse: true,
-    label: "Alfred is waiting for your approval.",
+    label: "Operator Orb is waiting for your approval.",
     icon: "◒",
   },
   Error: {
     color: "bg-red-500",
     pulse: false,
-    label: "Alfred encountered an error.",
+    label: "Operator Orb encountered an error.",
     icon: "✕",
   },
 };
@@ -54,13 +54,13 @@ export default function AlfredStatus({ state, onClickOrb }: AlfredStatusProps) {
         className={`w-12 h-12 rounded-full flex items-center justify-center text-white text-xl font-bold transition-all ${config.color} ${
           config.pulse ? "animate-pulse" : ""
         } hover:opacity-80 cursor-pointer shadow-lg`}
-        aria-label={`Alfred status: ${state}`}
+        aria-label={`Operator Orb status: ${state}`}
       >
         {config.icon}
       </button>
       <div>
         <div className="text-sm font-semibold text-gray-400 uppercase tracking-widest">
-          Alfred
+          Operator Orb
         </div>
         <div className="text-white font-medium">{state}</div>
         <div className="text-xs text-gray-400 mt-0.5">{config.label}</div>

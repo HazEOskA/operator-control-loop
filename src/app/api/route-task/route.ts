@@ -86,11 +86,11 @@ export async function POST(req: NextRequest) {
     task = appendLog(
       { ...task, redTeamResult },
       "red_team_checked",
-      `Red team status: ${redTeamResult.status}. Flags: [${redTeamResult.flags.join(", ") || "none"}]`
+      `Risk Gate status: ${redTeamResult.status}. Flags: [${redTeamResult.flags.join(", ") || "none"}]`
     );
 
     if (redTeamResult.status === "blocked") {
-      task = appendLog(task, "error", `Blocked by Red Team: ${redTeamResult.reason}`);
+      task = appendLog(task, "error", `Blocked by Risk Gate: ${redTeamResult.reason}`);
       writeTaskToLog(task);
       return NextResponse.json({ task } as RouteTaskResponse);
     }

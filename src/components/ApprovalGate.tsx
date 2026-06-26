@@ -53,7 +53,7 @@ export default function ApprovalGate({
   if (!task) {
     return (
       <div className="bg-gray-900 rounded-xl border border-gray-700 p-5">
-        <h2 className="text-lg font-bold text-white mb-2">Approval Gate</h2>
+        <h2 className="text-lg font-bold text-white mb-2">Operator Gate</h2>
         <p className="text-gray-500 text-sm">No task pending approval.</p>
       </div>
     );
@@ -66,7 +66,7 @@ export default function ApprovalGate({
 
   return (
     <div className="bg-gray-900 rounded-xl border border-gray-700 p-5">
-      <h2 className="text-lg font-bold text-white mb-4">Approval Gate</h2>
+      <h2 className="text-lg font-bold text-white mb-4">Operator Gate</h2>
 
       {isCompleted ? (
         <div
@@ -85,7 +85,7 @@ export default function ApprovalGate({
               ? "Task Rejected"
               : task.status === "approved"
               ? "Task Approved"
-              : "Execute Preview Completed"}
+              : "Execution Preview Completed"}
           </div>
           <div className="text-sm text-gray-300 mt-1">
             {task.status === "rejected"
@@ -120,7 +120,7 @@ export default function ApprovalGate({
                     : "text-red-400"
                 }`}
               >
-                ⚠ Red Team: {task.redTeamResult.status.toUpperCase()} — {task.redTeamResult.reason}
+                ⚠ Risk Gate: {task.redTeamResult.status.toUpperCase()} — {task.redTeamResult.reason}
               </div>
             )}
           </div>

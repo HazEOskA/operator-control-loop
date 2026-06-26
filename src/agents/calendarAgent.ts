@@ -19,7 +19,7 @@ const DEMO_EVENTS = [
   },
   {
     id: "demo-evt-003",
-    title: "ALFA Agent Demo",
+    title: "Operator Loop Demo",
     date: "2026-06-27",
     time: "10:00",
     duration: "45 min",
@@ -34,7 +34,7 @@ export function runCalendarAgent(_input: string): AgentResult {
   ).join("\n");
 
   const output = `
-[DEMO — Calendar Agent — Read-Only]
+[DEMO — Schedule Unit — Read-Only]
 
 ⚠ This is a DEMO adapter. No real Google Calendar connection exists in v0.2.
 ⚠ No calendar events have been created or modified.
@@ -42,7 +42,7 @@ export function runCalendarAgent(_input: string): AgentResult {
 Upcoming Events (Demo Data):
 ${eventList}
 
-Note: In a production deployment with Google OAuth configured, this agent
+Note: In a production deployment with Google OAuth configured, this unit
 would read your actual calendar. All write operations are disabled in v0.2.
 `.trim();
 

@@ -1,13 +1,13 @@
-# ALFA MVP v0.2 — Agent Control Loop
+# Operator Loop v0.2 — Operator Control Loop
 
-A small, stable local agent control panel MVP built with Next.js, TypeScript, React, and Tailwind CSS.
+A small, stable local operator control panel MVP built with Next.js, TypeScript, React, and Tailwind CSS.
 
 ## Purpose
 
-Prove one controlled agent workflow:
+Prove one controlled operator workflow:
 
 ```
-Input → Router → Agent → Red Team → Simulator → User Approval → Execute Preview → Logs → Status
+Input → Switchboard → Unit → Risk Gate → Dry Run → Operator Gate → Execution Preview → Trace Log → Status
 ```
 
 ## What This Is NOT
@@ -41,30 +41,30 @@ src/
     page.tsx                  # Main UI
     layout.tsx
     api/
-      route-task/route.ts     # POST: receives input, routes, runs agent, red team, simulator
-      approve-task/route.ts   # POST: approve or reject a task
-      task-log/route.ts       # GET: read saved task log
+      route-task/route.ts     # POST: receives input, routes via Switchboard, runs Unit, Risk Gate, Dry Run
+      approve-task/route.ts   # POST: approve or reject a task at the Operator Gate
+      task-log/route.ts       # GET: read saved trace log
   components/
-    AlfredStatus.tsx          # Alfred desktop companion orb
-    AgentPanel.tsx            # Task input form
-    TaskTimeline.tsx          # Step-by-step task progress
-    ApprovalGate.tsx          # Approve / Reject UI
-    SystemLogPanel.tsx        # Live + saved log viewer
+    AlfredStatus.tsx          # Operator Orb status component
+    AgentPanel.tsx            # Task input form (Unit Input)
+    TaskTimeline.tsx          # Task Trace — step-by-step progress
+    ApprovalGate.tsx          # Operator Gate — Approve / Reject UI
+    SystemLogPanel.tsx        # Trace Log viewer
   agents/
-    researchAgent.ts          # Demo research briefing agent
-    calendarAgent.ts          # Demo read-only calendar agent
-    gmailAgent.ts             # Demo read-only Gmail agent
-    codingAgent.placeholder.ts # Placeholder - not active in v0.2
+    researchAgent.ts          # Scout Unit — demo research briefing
+    calendarAgent.ts          # Schedule Unit — demo read-only calendar
+    gmailAgent.ts             # Inbox Unit — demo read-only Gmail
+    codingAgent.placeholder.ts # Forge Unit — placeholder, not active in v0.2
   core/
-    router.ts                 # Intent classifier -> agent selector
-    redTeam.ts                # Risk checker (clear / warning / blocked)
-    simulator.ts              # Preview generator
-    executor.ts               # Local JSON log writer
-    logger.ts                 # Log entry factory
+    router.ts                 # Switchboard — intent classifier -> unit selector
+    redTeam.ts                # Risk Gate — checks output (clear / warning / blocked)
+    simulator.ts              # Dry Run — preview generator
+    executor.ts               # Execution Preview — local JSON log writer
+    logger.ts                 # Trace Log entry factory
   types/
     task.ts                   # All TypeScript types
   data/
-    task-log.json             # Local task log (no database)
+    task-log.json             # Local trace log (no database)
 docs/
   ARCHITECTURE.md
   MVP_SCOPE.md
@@ -72,19 +72,19 @@ docs/
   VALIDATION.md
 ```
 
-## Alfred States
+## Operator Orb States
 
-| State    | Color  | Meaning                         |
-|----------|--------|---------------------------------|
-| Idle     | Indigo | Ready, no active task           |
-| Thinking | Amber  | Processing input / routing      |
-| Working  | Green  | Agent running                   |
-| Waiting  | Blue   | Awaiting user approval          |
-| Error    | Red    | Task failed or was blocked      |
+| State    | Color  | Meaning                              |
+|----------|--------|--------------------------------------|
+| Idle     | Indigo | Ready, no active task                |
+| Thinking | Amber  | Switchboard + Unit processing        |
+| Working  | Green  | Unit running                         |
+| Waiting  | Blue   | Awaiting Operator Gate decision      |
+| Error    | Red    | Task failed, Risk Gate blocked, error |
 
 ## Demo Disclaimer
 
-All agent outputs in v0.2 are clearly labeled `[DEMO]`. No real data is fetched. No external services are called. See `docs/SAFETY_RULES.md`.
+All unit outputs in v0.2 are clearly labeled `[DEMO]`. No real data is fetched. No external services are called. See `docs/SAFETY_RULES.md`.
 
 ## Docs
 

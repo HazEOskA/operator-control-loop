@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ALFA MVP v0.2 — Agent Control Loop",
+  title: "Operator Loop v0.2 — Operator Control Loop",
   description:
-    "ALFA Agent Control Loop: a controlled, safe-by-design local agent workflow panel. v0.2 MVP.",
+    "Operator Loop v0.2: a controlled, safe-by-design local operator workflow panel.",
 };
 
 export default function RootLayout({

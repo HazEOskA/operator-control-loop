@@ -1,4 +1,4 @@
-# ALFA MVP v0.2 — Safety Rules
+# Operator Loop v0.2 — Safety Rules
 
 These rules are enforced in v0.2 and must not be removed without explicit version upgrade decisions.
 
@@ -6,11 +6,11 @@ These rules are enforced in v0.2 and must not be removed without explicit versio
 
 | Rule | Detail |
 |------|--------|
-| No email sending | gmailAgent is read-only demo only |
-| No calendar writing | calendarAgent is read-only demo only |
+| No email sending | Inbox Unit (gmailAgent) is read-only demo only |
+| No calendar writing | Schedule Unit (calendarAgent) is read-only demo only |
 | No file deletion | No rm, unlink, or destructive fs operations |
 | No shell execution | No exec, spawn, or child_process calls |
-| No deploy execution | No CI triggers, no Vercel deploys from agent |
+| No deploy execution | No CI triggers, no Vercel deploys from any unit |
 | No payment or crypto | No financial transactions of any kind |
 | No destructive database ops | No DROP, TRUNCATE, or DELETE in v0.2 (no DB exists) |
 
@@ -18,24 +18,24 @@ These rules are enforced in v0.2 and must not be removed without explicit versio
 
 | Behavior | Detail |
 |----------|--------|
-| Every task is logged | All steps written to task-log.json |
-| Approval required | No execute step without user clicking Approve |
-| Red team check | Every agent result is checked before approval gate |
-| Rejection logged | Rejected tasks are written to log with rejected status |
-| Error logged | Failed runs set status to error and write to log |
+| Every task is traced | All steps written to task-log.json (Trace Log) |
+| Operator Gate required | No Execution Preview without user clicking Approve |
+| Risk Gate check | Every unit result is checked before Operator Gate |
+| Rejection traced | Rejected tasks are written to trace log with rejected status |
+| Error traced | Failed runs set status to error and write to trace log |
 | Demo labels visible | All mock/demo data clearly labeled in UI and output |
-| No silent failures | Failed agent runs return Error state, not empty output |
+| No silent failures | Failed unit runs return Error state, not empty output |
 
-## Red Team Block Conditions
+## Risk Gate Block Conditions
 
-The following patterns cause a task to be blocked before reaching the approval gate:
+The following patterns cause a task to be blocked before reaching the Dry Run / Operator Gate:
 
 - `destructive_action`: delete, remove, destroy, wipe, drop, rm -rf, format, overwrite
 - `shell_execution`: exec, execute, run command, shell, bash, powershell, backtick patterns
 
-## Red Team Warning Conditions
+## Risk Gate Warning Conditions
 
-The following patterns set status to warning (approval gate still shown, warning displayed):
+The following patterns set status to warning (Operator Gate still shown, warning displayed):
 
 - `external_integration`: send email, compose email, reply to, create event, write to calendar, post, publish, deploy, push to production
 - `private_data`: password, secret, token, api key, credential, private key, SSN, credit card, bank account, PII

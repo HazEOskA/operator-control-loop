@@ -1,5 +1,5 @@
 {
-  "name": "alfa-agent-control-loop",
+  "name": "operator-control-loop",
   "version": "0.2.0",
   "private": true,
   "scripts": {

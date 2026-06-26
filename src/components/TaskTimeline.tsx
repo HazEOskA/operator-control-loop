@@ -8,15 +8,15 @@ interface TaskTimelineProps {
 
 const STATUS_LABELS: Record<TaskStatus, string> = {
   input_received: "Input Received",
-  routed: "Routed to Agent",
-  agent_started: "Agent Started",
-  agent_completed: "Agent Completed",
-  red_team_checked: "Red Team Checked",
-  simulated: "Simulated Preview",
-  waiting_for_approval: "Waiting for Approval",
+  routed: "Routed to Unit",
+  agent_started: "Unit Started",
+  agent_completed: "Unit Completed",
+  red_team_checked: "Risk Gate Checked",
+  simulated: "Dry Run Preview",
+  waiting_for_approval: "Operator Gate — Awaiting Decision",
   approved: "Approved",
   rejected: "Rejected",
-  execute_preview_completed: "Execute Preview Completed",
+  execute_preview_completed: "Execution Preview Completed",
   error: "Error",
 };
 
@@ -38,22 +38,22 @@ export default function TaskTimeline({ task }: TaskTimelineProps) {
   if (!task) {
     return (
       <div className="bg-gray-900 rounded-xl border border-gray-700 p-5">
-        <h2 className="text-lg font-bold text-white mb-2">Task Timeline</h2>
-        <p className="text-gray-500 text-sm">Submit a task to see the timeline.</p>
+        <h2 className="text-lg font-bold text-white mb-2">Task Trace</h2>
+        <p className="text-gray-500 text-sm">Submit a task to see the trace.</p>
       </div>
     );
   }
 
   return (
     <div className="bg-gray-900 rounded-xl border border-gray-700 p-5">
-      <h2 className="text-lg font-bold text-white mb-1">Task Timeline</h2>
+      <h2 className="text-lg font-bold text-white mb-1">Task Trace</h2>
       <p className="text-xs text-gray-500 mb-4 font-mono">ID: {task.id}</p>
 
       {task.routerResult && (
         <div className="mb-4 bg-gray-800 rounded-lg p-3 border border-gray-700">
-          <div className="text-xs font-semibold text-gray-400 uppercase mb-1">Router</div>
+          <div className="text-xs font-semibold text-gray-400 uppercase mb-1">Switchboard</div>
           <div className="text-sm text-white">
-            Agent: <span className="text-indigo-400 font-mono">{task.routerResult.agent}</span>
+            Unit: <span className="text-indigo-400 font-mono">{task.routerResult.agent}</span>
           </div>
           <div className="text-sm text-gray-300">Intent: {task.routerResult.intent}</div>
           <div className="text-xs text-gray-500 mt-1">{task.routerResult.reason}</div>
@@ -70,7 +70,7 @@ export default function TaskTimeline({ task }: TaskTimelineProps) {
               : "bg-red-900/30 border-red-700"
           }`}
         >
-          <div className="text-xs font-semibold text-gray-400 uppercase mb-1">Red Team</div>
+          <div className="text-xs font-semibold text-gray-400 uppercase mb-1">Risk Gate</div>
           <div
             className={`text-sm font-bold uppercase ${
               task.redTeamResult.status === "clear"
@@ -101,7 +101,7 @@ export default function TaskTimeline({ task }: TaskTimelineProps) {
       {task.simulatorPreview && (
         <div className="mb-4 bg-cyan-900/20 rounded-lg p-3 border border-cyan-800">
           <div className="text-xs font-semibold text-gray-400 uppercase mb-1">
-            Simulator Preview
+            Dry Run Preview
           </div>
           <div className="text-sm font-semibold text-cyan-300">{task.simulatorPreview.action}</div>
           <div className="text-xs text-gray-300 mt-1">{task.simulatorPreview.preview}</div>
@@ -111,7 +111,7 @@ export default function TaskTimeline({ task }: TaskTimelineProps) {
       {task.agentResult && (
         <div className="mb-4 bg-gray-800 rounded-lg p-3 border border-gray-700">
           <div className="text-xs font-semibold text-gray-400 uppercase mb-1">
-            Agent Output{task.agentResult.isDemo && (
+            Unit Output{task.agentResult.isDemo && (
               <span className="ml-2 bg-amber-800 text-amber-200 text-xs px-1.5 py-0.5 rounded">
                 DEMO
               </span>

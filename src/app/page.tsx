@@ -34,11 +34,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
-              A
+              O
             </div>
             <div>
-              <div className="font-bold text-white leading-tight">ALFA</div>
-              <div className="text-xs text-gray-500">MVP v0.2 — Agent Control Loop</div>
+              <div className="font-bold text-white leading-tight">Operator Loop</div>
+              <div className="text-xs text-gray-500">v0.2 — Operator Control Loop</div>
             </div>
           </div>
           <div className="flex items-center gap-2 text-xs text-gray-500">
@@ -78,7 +78,7 @@ export default function Home() {
 
         <footer className="mt-8 text-center text-xs text-gray-600 border-t border-gray-800 pt-4">
           <p>
-            ALFA Agent Control Loop — MVP v0.2 &nbsp;|&nbsp; All integrations are{" "}
+            Operator Loop v0.2 — Operator Control Loop &nbsp;|&nbsp; All integrations are{" "}
             <span className="text-amber-500">demo/read-only</span> in this release &nbsp;|&nbsp;
             No emails, calendar writes, or destructive actions occur
           </p>

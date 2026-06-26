@@ -18,7 +18,7 @@ export default function SystemLogPanel({ currentTask }: SystemLogPanelProps) {
     setLogError(null);
     try {
       const res = await fetch("/api/task-log");
-      if (!res.ok) throw new Error("Failed to load task log.");
+      if (!res.ok) throw new Error("Failed to load trace log.");
       const data = await res.json();
       setPersistedTasks(data.tasks ?? []);
       setShowLog(true);
@@ -34,13 +34,13 @@ export default function SystemLogPanel({ currentTask }: SystemLogPanelProps) {
   return (
     <div className="bg-gray-900 rounded-xl border border-gray-700 p-5">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-white">System Log</h2>
+        <h2 className="text-lg font-bold text-white">Trace Log</h2>
         <button
           onClick={loadTaskLog}
           disabled={isLoadingLog}
           className="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-600 rounded px-3 py-1.5 transition-colors disabled:opacity-40"
         >
-          {isLoadingLog ? "Loading..." : "Show Saved Logs"}
+          {isLoadingLog ? "Loading..." : "Show Trace Log"}
         </button>
       </div>
 
@@ -77,7 +77,7 @@ export default function SystemLogPanel({ currentTask }: SystemLogPanelProps) {
           ))}
         </div>
       ) : (
-        <p className="text-gray-500 text-sm mb-4">No active session logs.</p>
+        <p className="text-gray-500 text-sm mb-4">No active trace entries.</p>
       )}
 
       {logError && (
@@ -118,7 +118,7 @@ export default function SystemLogPanel({ currentTask }: SystemLogPanelProps) {
                 <div className="text-sm text-white truncate">{t.input}</div>
                 {t.routerResult && (
                   <div className="text-xs text-indigo-400 mt-0.5">
-                    Agent: {t.routerResult.agent}
+                    Unit: {t.routerResult.agent}
                   </div>
                 )}
                 <div className="text-xs text-gray-500 mt-0.5">

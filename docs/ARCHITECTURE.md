@@ -1,8 +1,8 @@
-# ALFA MVP v0.2 — Architecture
+# Operator Loop v0.2 — Architecture
 
 ## Overview
 
-ALFA is a controlled agent workflow panel. Every action requires user approval before execution. There are no autonomous side effects.
+Operator Loop is a controlled operator workflow panel. Every action requires user approval before execution. There are no autonomous side effects.
 
 ## Flow Diagram
 
@@ -12,61 +12,61 @@ ALFA is a controlled agent workflow panel. Every action requires user approval b
      v
 [API: /api/route-task]
      |
-     +-- [Router] --> classifies intent --> selects agent
+     +-- [Switchboard] --> classifies intent --> selects unit
      |
-     +-- [Agent] --> produces output (DEMO in v0.2)
+     +-- [Unit] --> produces output (DEMO in v0.2)
      |
-     +-- [Red Team] --> checks output for risks
+     +-- [Risk Gate] --> checks output for risks
      |         |
-     |    BLOCKED? --> Error state, log, return
+     |    BLOCKED? --> Error state, trace log, return
      |
-     +-- [Simulator] --> creates preview of proposed action
+     +-- [Dry Run] --> creates preview of proposed action
      |
      +-- status = waiting_for_approval
      |
-[UI: ApprovalGate shows Approve / Reject]
+[UI: Operator Gate shows Approve / Reject]
      |
-     +-- Reject --> status = rejected, log, Alfred = Idle
+     +-- Reject --> status = rejected, trace log, Operator Orb = Idle
      |
      +-- Approve --> [API: /api/approve-task]
                         |
-                        +-- [Executor] --> writes to task-log.json
+                        +-- [Execution Preview] --> writes to task-log.json
                         +-- status = execute_preview_completed
-                        +-- Alfred = Idle
+                        +-- Operator Orb = Idle
 ```
 
 ## Modules
 
-### Router (`src/core/router.ts`)
+### Switchboard (`src/core/router.ts`)
 - Input: raw user string
 - Output: `{ intent, agent, reason }`
 - Method: regex pattern matching against known intent categories
 - Intents: `research`, `calendar`, `gmail`, `coding_placeholder`, `unknown`
 
-### Agents (`src/agents/`)
-- `researchAgent.ts`: Returns demo research briefing
-- `calendarAgent.ts`: Returns hardcoded demo calendar events (read-only)
-- `gmailAgent.ts`: Returns hardcoded demo email summaries (read-only)
-- `codingAgent.placeholder.ts`: Placeholder, returns status message only
+### Units (`src/agents/`)
+- `researchAgent.ts` (Scout Unit): Returns demo research briefing
+- `calendarAgent.ts` (Schedule Unit): Returns hardcoded demo calendar events (read-only)
+- `gmailAgent.ts` (Inbox Unit): Returns hardcoded demo email summaries (read-only)
+- `codingAgent.placeholder.ts` (Forge Unit): Placeholder, returns status message only
 
-### Red Team (`src/core/redTeam.ts`)
-- Input: original user input + agent output
+### Risk Gate (`src/core/redTeam.ts`)
+- Input: original user input + unit output
 - Output: `{ status: 'clear' | 'warning' | 'blocked', flags[], reason }`
 - Checks for: destructive actions, external integrations, private data, shell execution
-- If `blocked`: task is cancelled before reaching simulator
+- If `blocked`: task is cancelled before reaching Dry Run
 
-### Simulator (`src/core/simulator.ts`)
-- Input: router result + agent result
+### Dry Run (`src/core/simulator.ts`)
+- Input: switchboard result + unit result
 - Output: `{ action, preview, safeToExecute }`
 - Generates a human-readable preview of what would happen if approved
-- In v0.2 all actions are local-only (write to JSON log)
+- In v0.2 all actions are local-only (write to JSON trace log)
 
-### Executor (`src/core/executor.ts`)
+### Execution Preview (`src/core/executor.ts`)
 - Reads/writes `src/data/task-log.json`
-- Only called after user approval
+- Only called after user approval at Operator Gate
 - No network calls, no external writes
 
-### Logger (`src/core/logger.ts`)
+### Trace Log (`src/core/logger.ts`)
 - Creates `LogEntry` records with step + timestamp + detail
 - All steps produce a log entry
 
@@ -74,13 +74,13 @@ ALFA is a controlled agent workflow panel. Every action requires user approval b
 
 All state lives in the `Task` type (see `src/types/task.ts`). Tasks are persisted to `src/data/task-log.json` after approval or rejection. No database is used in v0.2.
 
-## Alfred States
+## Operator Orb States
 
-Alfred is a UI status orb that reflects the actual application state:
+The Operator Orb is a UI status indicator that reflects actual application state:
 - `Idle`: no active task
-- `Thinking`: router + agent running (set by AgentPanel)
-- `Working`: agent completed, red team running (not a separate state in v0.2 — simplified to Thinking→Waiting)
-- `Waiting`: approval gate open
-- `Error`: red team blocked or runtime error
+- `Thinking`: Switchboard + unit running (set by AgentPanel)
+- `Working`: unit completed, Risk Gate running (simplified to Thinking→Waiting in v0.2)
+- `Waiting`: Operator Gate open, awaiting decision
+- `Error`: Risk Gate blocked or runtime error
 
-Alfred state is pure React state — not a fake animation.
+Operator Orb state is pure React state — not a fake animation.
