@@ -17,6 +17,7 @@ const STATUS_LABELS: Record<TaskStatus, string> = {
   approved: "Approved",
   rejected: "Rejected",
   execute_preview_completed: "Execution Preview Completed",
+  blocked: "Task Blocked",
   error: "Error",
 };
 
@@ -31,6 +32,7 @@ const STATUS_COLORS: Record<TaskStatus, string> = {
   approved: "bg-green-500",
   rejected: "bg-red-500",
   execute_preview_completed: "bg-emerald-600",
+  blocked: "bg-orange-500",
   error: "bg-red-600",
 };
 

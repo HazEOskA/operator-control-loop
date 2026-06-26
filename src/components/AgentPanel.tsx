@@ -5,7 +5,7 @@ import type { Task } from "@/types/task";
 
 interface AgentPanelProps {
   onTaskSubmitted: (task: Task) => void;
-  onAlfredStateChange: (state: "Thinking" | "Working" | "Waiting" | "Error" | "Idle") => void;
+  onAlfredStateChange: (state: "Thinking" | "Working" | "Waiting" | "Blocked" | "Error" | "Idle") => void;
   disabled?: boolean;
 }
 
@@ -42,7 +42,9 @@ export default function AgentPanel({
 
       const task: Task = data.task;
       onAlfredStateChange(
-        task.status === "error"
+        task.status === "blocked"
+          ? "Blocked"
+          : task.status === "error"
           ? "Error"
           : task.status === "waiting_for_approval"
           ? "Waiting"

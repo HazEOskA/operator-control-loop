@@ -142,6 +142,13 @@ export default function ApprovalGate({
             </button>
           </div>
         </div>
+      ) : task.status === "blocked" ? (
+        <div className="bg-orange-900/30 border border-orange-700 rounded-lg p-4">
+          <div className="text-orange-400 font-bold">Task Blocked</div>
+          <div className="text-sm text-gray-300 mt-1">
+            {task.logs.find((l) => l.step === "blocked")?.detail ?? "Blocked by Risk Gate."}
+          </div>
+        </div>
       ) : task.status === "error" ? (
         <div className="bg-red-900/30 border border-red-700 rounded-lg p-4">
           <div className="text-red-400 font-bold">Task Error</div>

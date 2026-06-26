@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
     );
 
     if (redTeamResult.status === "blocked") {
-      task = appendLog(task, "error", `Blocked by Risk Gate: ${redTeamResult.reason}`);
+      task = appendLog(task, "blocked", `Blocked by Risk Gate: ${redTeamResult.reason}`);
       writeTaskToLog(task);
       return NextResponse.json({ task } as RouteTaskResponse);
     }

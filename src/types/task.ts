@@ -17,6 +17,7 @@ export type AlfredState =
   | "Thinking"
   | "Working"
   | "Waiting"
+  | "Blocked"
   | "Error";
 
 export type RedTeamStatus = "clear" | "warning" | "blocked";
@@ -32,6 +33,7 @@ export type TaskStatus =
   | "approved"
   | "rejected"
   | "execute_preview_completed"
+  | "blocked"
   | "error";
 
 export interface LogEntry {
