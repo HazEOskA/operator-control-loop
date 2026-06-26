@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
     try {
       switch (routerResult.agent) {
         case "researchAgent":
-          agentResult = runResearchAgent(trimmedInput);
+          agentResult = await runResearchAgent(trimmedInput);
           break;
         case "calendarAgent":
           agentResult = runCalendarAgent(trimmedInput);
@@ -75,10 +75,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ task } as RouteTaskResponse);
     }
 
+    const modeLabel = agentResult.source
+      ? agentResult.source === "real_api"
+        ? `real_api (${agentResult.provider})`
+        : "demo_fallback"
+      : `isDemo=${agentResult.isDemo}`;
     task = appendLog(
       { ...task, agentResult },
       "agent_completed",
-      `${routerResult.agent} completed (isDemo=${agentResult.isDemo})`
+      `${routerResult.agent} completed [${modeLabel}]`
     );
 
     // Red team check

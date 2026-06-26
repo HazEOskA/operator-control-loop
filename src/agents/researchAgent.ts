@@ -1,9 +1,7 @@
 import type { AgentResult } from "@/types/task";
+import { callLlm } from "@/integrations/llmProvider";
 
-export function runResearchAgent(input: string): AgentResult {
-  const topic = input.trim() || "the requested topic";
-
-  const output = `
+const DEMO_OUTPUT = (topic: string) => `
 [DEMO — Scout Unit Briefing]
 
 Topic: "${topic}"
@@ -26,9 +24,33 @@ Demo Findings:
 Recommended Action: Review this briefing and approve to log, or reject to cancel.
 `.trim();
 
+const SYSTEM_PROMPT =
+  "You are the Scout Unit in a controlled operator loop. Your role is to produce concise, factual research briefings. " +
+  "Format your response as a structured operator briefing with: a one-paragraph summary, 3-5 key points, and a recommended action. " +
+  "Keep your response under 400 words. Do not invent facts you are unsure about — say so plainly.";
+
+export async function runResearchAgent(input: string): Promise<AgentResult> {
+  const topic = input.trim() || "the requested topic";
+
+  const llmResult = await callLlm(
+    `${SYSTEM_PROMPT}\n\nResearch request: ${topic}`
+  );
+
+  if (llmResult.source === "real_api" && llmResult.output) {
+    return {
+      agent: "researchAgent",
+      output: llmResult.output,
+      isDemo: false,
+      source: "real_api",
+      provider: llmResult.provider,
+    };
+  }
+
   return {
     agent: "researchAgent",
-    output,
+    output: DEMO_OUTPUT(topic),
     isDemo: true,
+    source: "demo_fallback",
+    provider: "none",
   };
 }

@@ -110,10 +110,24 @@ export default function TaskTimeline({ task }: TaskTimelineProps) {
 
       {task.agentResult && (
         <div className="mb-4 bg-gray-800 rounded-lg p-3 border border-gray-700">
-          <div className="text-xs font-semibold text-gray-400 uppercase mb-1">
-            Unit Output{task.agentResult.isDemo && (
-              <span className="ml-2 bg-amber-800 text-amber-200 text-xs px-1.5 py-0.5 rounded">
+          <div className="text-xs font-semibold text-gray-400 uppercase mb-1 flex items-center gap-1.5">
+            Unit Output
+            {task.agentResult.source === "real_api" ? (
+              <span className="bg-emerald-800 text-emerald-200 text-xs px-1.5 py-0.5 rounded">
+                REAL API
+              </span>
+            ) : task.agentResult.source === "demo_fallback" ? (
+              <span className="bg-amber-800 text-amber-200 text-xs px-1.5 py-0.5 rounded">
+                DEMO FALLBACK
+              </span>
+            ) : task.agentResult.isDemo ? (
+              <span className="bg-amber-800 text-amber-200 text-xs px-1.5 py-0.5 rounded">
                 DEMO
+              </span>
+            ) : null}
+            {task.agentResult.provider && task.agentResult.provider !== "none" && (
+              <span className="text-gray-500 text-xs font-normal normal-case">
+                {task.agentResult.provider}
               </span>
             )}
           </div>

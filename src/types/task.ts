@@ -50,6 +50,8 @@ export interface AgentResult {
   agent: AgentType;
   output: string;
   isDemo: boolean;
+  source?: "real_api" | "demo_fallback";
+  provider?: string;
 }
 
 export interface RedTeamResult {
